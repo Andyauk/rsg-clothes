@@ -28,7 +28,6 @@ AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
                 MySQL.Async.execute("UPDATE playerclothe SET `clothes` = ? WHERE `citizenid`= ? AND `license`= ?", {encode, citizenid, license})
             else
                 MySQL.Async.insert('INSERT INTO playerclothe (citizenid, license, clothes) VALUES (?, ?, ?);', {citizenid, license, encode})
-
             end
         end)
         if _Name then
@@ -55,7 +54,6 @@ AddEventHandler('rsg-clothes:LoadClothes', function(value)
     local citizenid = User.PlayerData.citizenid
     local license = RSGCore.Functions.GetIdentifier(source, 'license')
     local _clothes =  MySQL.Sync.fetchAll('SELECT * FROM playerclothe WHERE citizenid = ? AND license = ?', {citizenid, license})
-
     if _clothes[1] then
         _clothes = json.decode(_clothes[1].clothes)
     else
@@ -75,15 +73,16 @@ AddEventHandler('rsg-clothes:SetOutfits', function(name)
     local _source = source
     local _name = name
     local Player = RSGCore.Functions.GetPlayer(_source)
-        local citizenid = Player.PlayerData.citizenid
-        local license = RSGCore.Functions.GetIdentifier(_source, 'license')
-        TriggerEvent('rsg-clothes:retrieveOutfits', citizenid, license, _name, function(call)
-            if call then
-                MySQL.Async.execute("UPDATE playerclothe SET `clothes` = ? WHERE `citizenid`= ? AND `license`= ? ", {call, citizenid, license})
-                TriggerClientEvent("rsg-appearance:LoadSkinClient", _source)
-            end
-        end)
+    local citizenid = Player.PlayerData.citizenid
+    local license = RSGCore.Functions.GetIdentifier(_source, 'license')
+    TriggerEvent('rsg-clothes:retrieveOutfits', citizenid, license, _name, function(call)
+        if call then
+            MySQL.Async.execute("UPDATE playerclothe SET `clothes` = ? WHERE `citizenid`= ? AND `license`= ? ", {call, citizenid, license})
+            TriggerClientEvent("rsg-appearance:LoadSkinClient", _source)
+        end
+    end)
 end)
+
 RegisterServerEvent('rsg-clothes:DeleteOutfit')
 AddEventHandler('rsg-clothes:DeleteOutfit', function(name)
     local _source = source

@@ -9,18 +9,12 @@ TriggerEvent("rsg-menubase:getData", function(call)
     MenuData = call
 end)
 
--- RegisterCommand('opencloth', function(source, args, raw)
---     TriggerServerEvent("rsg-clothes:LoadClothes", 2)
--- end)
-
 function OpenClothingMenu()
     MenuData.CloseAll()
     local elements = {}
-
     for v, k in pairsByKeys(Config.MenuElements) do
         table.insert(elements, {label = k.label or v, value = v, category = v, desc = ""})
     end
-
     table.insert(elements, {label = Config.Label["save"] or "Save", value = "save", desc = ""})
     MenuData.Open('default', GetCurrentResourceName(), 'clothing_store_menu',
             {title = 'Clothes', subtext = 'Options', align = 'top-left', elements = elements}, function(data, menu)
@@ -42,9 +36,7 @@ function OpenClothingMenu()
             saveOutfit = true
             TriggerServerEvent("rsg-clothes:Save", ClothesCache, output, CurrentPrice)
             OldClothesCache = {}
-
         end
-
     end, function(data, menu)
         menu.close()
         OldClothesCache = {}
@@ -56,7 +48,6 @@ end
 function OpenCateogry(menu_catagory)
     MenuData.CloseAll()
     local elements = {}
-
     if IsPedMale(PlayerPedId()) then
         local a = 1
         for v, k in pairsByKeys(Config.MenuElements[menu_catagory].category) do
@@ -69,7 +60,7 @@ function OpenCateogry(menu_catagory)
                 end
                 local options = {}
                 for k, v in pairs(category) do
-                    table.insert(options, "Styl " .. k)
+                    table.insert(options, k)
                 end
                 table.insert(elements,
                     {label = Config.Price[k] .. "$ " .. Config.Label[k] or v, value = ClothesCache[k].model or 0, category = k, desc = "", type = "slider", min = 0, max = #category, change_type = "model", id = a, options = options}
@@ -77,7 +68,7 @@ function OpenCateogry(menu_catagory)
                 a = a + 1
                 options = {}
                 for i = 1, GetMaxTexturesForModel(k, ClothesCache[k].model or 1), 1 do
-                    table.insert(options, "Color " .. i)
+                    table.insert(options, i)
                 end
                 table.insert(elements,
                     {label = "Color " .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
@@ -98,7 +89,7 @@ function OpenCateogry(menu_catagory)
                 end
                 local options = {}
                 for k, v in pairs(category) do
-                    table.insert(options, "Styl " .. k)
+                    table.insert(options, k)
                 end
                 table.insert(elements,
                     {label = Config.Price[k] .. "$ " .. Config.Label[k] or v, value = ClothesCache[k].model or 0, category = k, desc = "", type = "slider", min = 0, max = #category, change_type = "model", id = a,options = options}
@@ -106,7 +97,7 @@ function OpenCateogry(menu_catagory)
                 a = a + 1
                 options = {}
                 for i = 1, GetMaxTexturesForModel(k, ClothesCache[k].model or 1), 1 do
-                    table.insert(options, "Color " .. i)
+                    table.insert(options, i)
                 end
                 table.insert(elements,
                     {label = "Color " .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
@@ -118,7 +109,6 @@ function OpenCateogry(menu_catagory)
     end
     MenuData.Open('default', GetCurrentResourceName(), 'clothing_store_menu_category',
         {title = 'Clothes', subtext = 'Options', align = 'top-left', elements = elements}, function(data, menu)
-
     end, function(data, menu)
         menu.close()
         OpenClothingMenu()
@@ -128,7 +118,6 @@ function OpenCateogry(menu_catagory)
 end
 
 function MenuUpdateClothes(data, menu)
-
     if data.current.change_type == "model" then
         if ClothesCache[data.current.category].model ~= data.current.value then
             ClothesCache[data.current.category].texture = 1
@@ -137,11 +126,10 @@ function MenuUpdateClothes(data, menu)
                 local options = {}
                 if GetMaxTexturesForModel(data.current.category, data.current.value) > 1 then
                     for i = 1, GetMaxTexturesForModel(data.current.category, data.current.value), 1 do
-                        table.insert(options, "Color " .. i)
+                        table.insert(options, i)
                     end
                 else
                     table.insert(options, "Lack")
-
                 end
                 menu.setElement(data.current.id + 1, "options", options)
                 menu.setElement(data.current.id + 1, "max",
@@ -149,13 +137,11 @@ function MenuUpdateClothes(data, menu)
                 menu.setElement(data.current.id + 1, "min", 1)
                 menu.setElement(data.current.id + 1, "value", 1)
                 menu.refresh()
-
             else
                 menu.setElement(data.current.id + 1, "max", 0)
                 menu.setElement(data.current.id + 1, "min", 0)
                 menu.setElement(data.current.id + 1, "value", 0)
                 menu.refresh()
-
             end
             if CurrentPrice ~= CalculatePrice() then
                 CurrentPrice = CalculatePrice()
@@ -168,7 +154,6 @@ function MenuUpdateClothes(data, menu)
         end
     end
     if data.current.change_type == "texture" then
-        --print(ClothesCache[data.current.category].texture)
         if ClothesCache[data.current.category].texture ~= data.current.value then
             ClothesCache[data.current.category].texture = data.current.value
             Change(data.current.value, data.current.category, data.current.change_type)
@@ -177,12 +162,9 @@ function MenuUpdateClothes(data, menu)
 
 end
 function GetMaxTexturesForModel(category, model)
-    -- print(model)
-    -- print(category)
     if model == 0 then
         model = 1
     end
-    --print(#clothes_list["male"])
     if IsPedMale(PlayerPedId()) then
         return #clothes_list["male"][category][model]
     else
@@ -202,14 +184,12 @@ function ClothingLight()
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
             end
-
             if IsDisabledControlPressed(0, 0xFD0F0C2C) then
                 if c_zoom + 0.25 < 2.8 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-
             if IsDisabledControlPressed(0, 0xCC1075A7) then
                 if c_zoom - 0.25 < 2.8 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
@@ -222,9 +202,7 @@ function ClothingLight()
                     c_offset = c_offset - cursor_y / 7
                     camera(c_zoom, c_offset)
                 end
-
             end
-
         end
     end)
     Citizen.CreateThread(function()
@@ -258,7 +236,6 @@ AddEventHandler('rsg-clothes:OpenClothingMenu', function(ClothesComponents)
                 ClothesCache[k].texture = 0
             end
         end
-
     end
     OldClothesCache = deepcopy(ClothesCache)
     camera(2.8, -0.15)
@@ -271,33 +248,25 @@ function Change(id, category, change_type)
         Citizen.InvokeNative(0xD710A5007C2AC539, PlayerPedId(), GetHashKey(category), 0)
         NativeUpdatePedVariation(PlayerPedId())
         if category == "pants" or category == "boots" then
-            NativeSetPedComponentEnabled(PlayerPedId(), exports['rsg-appearance']:GetBodyCurrentComponentHash("BODIES_LOWER"),
-                false, true, true)
+            NativeSetPedComponentEnabled(PlayerPedId(), exports['rsg-appearance']:GetBodyCurrentComponentHash("BODIES_LOWER"), false, true, true)
         end
         if category == "shirts_full" then
-            NativeSetPedComponentEnabled(PlayerPedId(), exports['rsg-appearance']:GetBodyCurrentComponentHash("BODIES_UPPER"),
-                false, true, true)
+            NativeSetPedComponentEnabled(PlayerPedId(), exports['rsg-appearance']:GetBodyCurrentComponentHash("BODIES_UPPER"), false, true, true)
         end
     else
         if IsPedMale(PlayerPedId()) then
             if change_type == "model" then
-                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["male"][category][id][1].hash, false, true,
-                    true)
+                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["male"][category][id][1].hash, false, true, true)
             else
-                NativeSetPedComponentEnabled(PlayerPedId(),
-                    clothes_list["male"][category][ClothesCache[category].model][id].hash, false, true, true)
+                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["male"][category][ClothesCache[category].model][id].hash, false, true, true)
             end
-
         else
             if change_type == "model" then
-                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["female"][category][id][1].hash, false, true,
-                    true)
+                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["female"][category][id][1].hash, false, true, true)
             else
-                NativeSetPedComponentEnabled(PlayerPedId(),
-                    clothes_list["female"][category][ClothesCache[category].model][id].hash, false, true, true)
+                NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["female"][category][ClothesCache[category].model][id].hash, false, true, true)
             end
         end
-
     end
 end
 
@@ -322,9 +291,7 @@ AddEventHandler('rsg-clothes:ApplyClothes', function(ClothesComponents, Target)
                         if clothes_list["male"][k] ~= nil then
                             if clothes_list["male"][k][tonumber(v.model)] ~= nil then
                                 if clothes_list["male"][k][tonumber(v.model)][tonumber(v.texture)] ~= nil then
-                                    NativeSetPedComponentEnabled(_Target, tonumber(
-                                        clothes_list["male"][k][tonumber(v.model)][tonumber(v.texture)].hash), false,
-                                        true, true)
+                                    NativeSetPedComponentEnabled(_Target, tonumber(clothes_list["male"][k][tonumber(v.model)][tonumber(v.texture)].hash), false, true, true)
                                 end
                             end
                         end
@@ -332,9 +299,7 @@ AddEventHandler('rsg-clothes:ApplyClothes', function(ClothesComponents, Target)
                         if clothes_list["female"][k] ~= nil then
                             if clothes_list["female"][k][tonumber(v.model)] ~= nil then
                                 if clothes_list["female"][k][tonumber(v.model)][tonumber(v.texture)] ~= nil then
-                                    NativeSetPedComponentEnabled(_Target, tonumber(
-                                        clothes_list["female"][k][tonumber(v.model)][tonumber(v.texture)].hash), false,
-                                        true, true)
+                                    NativeSetPedComponentEnabled(_Target, tonumber(clothes_list["female"][k][tonumber(v.model)][tonumber(v.texture)].hash), false, true, true)
                                 end
                             end
                         end
@@ -345,7 +310,6 @@ AddEventHandler('rsg-clothes:ApplyClothes', function(ClothesComponents, Target)
         SetEntityAlpha(_Target, 255)
     end)
 end)
-
 
 function destory()
     SetCamActive(ClothingCamera, false)
@@ -373,8 +337,7 @@ function camera(zoom, offset)
     }
     if not ClothingCamera then
         DestroyAllCams(true)
-        ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset, 300.00,
-            0.00, 0.00, 40.00, false, 0)
+        ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset, 300.00, 0.00, 0.00, 40.00, false, 0)
         local pCoords = GetEntityCoords(PlayerPedId())
         PointCamAtCoord(ClothingCamera, pCoords.x, pCoords.y, pCoords.z + camOffset)
         SetCamActive(ClothingCamera, true)
@@ -382,8 +345,7 @@ function camera(zoom, offset)
         DisplayRadar(false)
         SetEntityHeading(playerPed, 334.0)
     else
-        local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset,
-            300.00, 0.00, 0.00, 40.00, false, 0)
+        local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset, 300.00, 0.00, 0.00, 40.00, false, 0)
         SetCamActive(ClothingCamera2, true)
         SetCamActiveWithInterp(ClothingCamera2, ClothingCamera, 750)
         local pCoords = GetEntityCoords(PlayerPedId())
@@ -429,7 +391,6 @@ end)
 
 function Outfits()
     local elements_outfits = {}
-
     if Outfits_tab ~= nil then
         for j, z in pairs(Outfits_tab) do
             table.insert(elements_outfits, {label = Outfits_tab[j].name, value = Outfits_tab[j].name, desc = "choose your clothes"})
@@ -443,10 +404,12 @@ function Outfits()
         menu.close()
     end)
 end
+
 local elements_outfits_manage = {
     {label = "wear", value = "SetOutfits", desc = "dress up"},
     {label = "remove the outfit", value = "DeleteOutfit", desc = ""}
 }
+
 function OutfitsManage(outfit)
     MenuData.CloseAll()
     MenuData.Open('default', GetCurrentResourceName(), 'outfits_menu_manage',
@@ -499,9 +462,9 @@ Citizen.CreateThread(function()
         if canwait then
             Wait(1000)
         end
-
     end
 end)
+
 exports('GetClothesComponents', function()
     return {ComponentsClothesMale, ComponentsClothesFemale}
 end)
