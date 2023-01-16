@@ -14,12 +14,12 @@ end
 detectNeededResources()
 RegisterServerEvent('rsg-clothes:Save')
 AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
-    local _source = source
+    local src = source
     local _Name = Name
     local encode = json.encode(Clothes)
-    local Player = RSGCore.Functions.GetPlayer(_source)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
-    local license = RSGCore.Functions.GetIdentifier(_source, 'license')
+    local license = RSGCore.Functions.GetIdentifier(src, 'license')
     local currentMoney = Player.Functions.GetMoney('cash')
     if currentMoney >= price then
         Player.Functions.RemoveMoney("cash", price)
@@ -41,14 +41,14 @@ AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
             end)
         end
     else
-        TriggerClientEvent("rsg-appearance:LoadSkinClient", _source)
+        TriggerClientEvent("rsg-appearance:LoadSkinClient", src)
     end
 end)
 
 RegisterServerEvent('rsg-clothes:LoadClothes')
 AddEventHandler('rsg-clothes:LoadClothes', function(value)
     local _value = value
-    local _source = source
+    local src = source
     local _clothes = nil
     local User = RSGCore.Functions.GetPlayer(source)
     local citizenid = User.PlayerData.citizenid
@@ -61,59 +61,48 @@ AddEventHandler('rsg-clothes:LoadClothes', function(value)
     end
     if _clothes ~= nil then
         if _value == 1 then
-            TriggerClientEvent("rsg-clothes:ApplyClothes", _source, _clothes)
+            TriggerClientEvent("rsg-clothes:ApplyClothes", src, _clothes)
         elseif _value == 2 then
-            TriggerClientEvent("rsg-clothes:OpenClothingMenu", _source, _clothes)
+            TriggerClientEvent("rsg-clothes:OpenClothingMenu", src, _clothes)
         end
     end
 end)
 
 RegisterServerEvent('rsg-clothes:SetOutfits')
 AddEventHandler('rsg-clothes:SetOutfits', function(name)
-    local _source = source
+    local src = source
     local _name = name
-    local Player = RSGCore.Functions.GetPlayer(_source)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
-    local license = RSGCore.Functions.GetIdentifier(_source, 'license')
+    local license = RSGCore.Functions.GetIdentifier(src, 'license')
     TriggerEvent('rsg-clothes:retrieveOutfits', citizenid, license, _name, function(call)
         if call then
             MySQL.Async.execute("UPDATE playerclothe SET `clothes` = ? WHERE `citizenid`= ? AND `license`= ? ", {call, citizenid, license})
-            TriggerClientEvent("rsg-appearance:LoadSkinClient", _source)
+            TriggerClientEvent("rsg-appearance:LoadSkinClient", src)
         end
     end)
 end)
 
 RegisterServerEvent('rsg-clothes:DeleteOutfit')
 AddEventHandler('rsg-clothes:DeleteOutfit', function(name)
-    local _source = source
+    local src = source
     local _name = name
-    local Player = RSGCore.Functions.GetPlayer(_source)
+    local Player = RSGCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
-    local license = RSGCore.Functions.GetIdentifier(_source, 'license')
+    local license = RSGCore.Functions.GetIdentifier(src, 'license')
     MySQL.Async.fetchAll('DELETE FROM playeroutfit WHERE citizenid = ? AND license = ? AND name =  ?', {citizenid, license, _name})
 end)
 
 RegisterServerEvent('rsg-clothes:getOutfits')
 AddEventHandler('rsg-clothes:getOutfits', function()
-    local _source = source
-    local Player = RSGCore.Functions.GetPlayer(_source)
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
-    local license = RSGCore.Functions.GetIdentifier(_source, 'license')
-    TriggerEvent('rsg-clothes:getOutfits', citizenid, license, function(call)
-        if call then
-            TriggerClientEvent('rsg-clothes:putInTable', _source, call)
-        end
-    end)
-end)
-
-AddEventHandler('rsg-clothes:getOutfits', function(citizenid, license, callback)
-    local Callback = callback
-    local outfits = MySQL.Sync.fetchAll('SELECT * FROM playeroutfit WHERE citizenid = ? AND license = ?', {citizenid, license})
-    if outfits[1] then
-        Callback(outfits)
-    else
-        Callback(false)
-    end
+    local license = RSGCore.Functions.GetIdentifier(src, 'license')
+	local outfits = MySQL.Sync.fetchAll('SELECT * FROM playeroutfit WHERE citizenid = ? AND license = ?', {citizenid, license})
+	if outfits[1] then
+		TriggerClientEvent('rsg-clothes:putInTable', src, outfits)
+	end
 end)
 
 AddEventHandler('rsg-clothes:retrieveClothes', function(citizenid, license, callback)
@@ -138,9 +127,9 @@ end)
 
 RegisterServerEvent("rsg-clothes:deleteClothes")
 AddEventHandler("rsg-clothes:deleteClothes", function(license, Callback)
-    local _source = source
+    local src = source
     local id
-    for k, v in ipairs(GetPlayerIdentifiers(_source)) do
+    for k, v in ipairs(GetPlayerIdentifiers(src)) do
         if string.sub(v, 1, string.len("steam:")) == "steam:" then
             id = v
             break
