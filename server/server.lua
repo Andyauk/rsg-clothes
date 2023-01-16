@@ -99,10 +99,10 @@ AddEventHandler('rsg-clothes:getOutfits', function()
     local Player = RSGCore.Functions.GetPlayer(src)
     local citizenid = Player.PlayerData.citizenid
     local license = RSGCore.Functions.GetIdentifier(src, 'license')
-	local outfits = MySQL.Sync.fetchAll('SELECT * FROM playeroutfit WHERE citizenid = ? AND license = ?', {citizenid, license})
-	if outfits[1] then
-		TriggerClientEvent('rsg-clothes:putInTable', src, outfits)
-	end
+    local outfits = MySQL.Sync.fetchAll('SELECT * FROM playeroutfit WHERE citizenid = ? AND license = ?', {citizenid, license})
+    if outfits[1] then
+        TriggerClientEvent('rsg-clothes:putInTable', src, outfits)
+    end
 end)
 
 AddEventHandler('rsg-clothes:retrieveClothes', function(citizenid, license, callback)

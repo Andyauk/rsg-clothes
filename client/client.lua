@@ -407,7 +407,7 @@ end
 
 local elements_outfits_manage = {
     {label = "wear", value = "SetOutfits", desc = "dress up"},
-    {label = "remove the outfit", value = "DeleteOutfit", desc = ""}
+    {label = "delete outfit", value = "DeleteOutfit", desc = ""}
 }
 
 function OutfitsManage(outfit)
