@@ -258,12 +258,20 @@ function Change(id, category, change_type)
             if change_type == "model" then
                 NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["male"][category][id][1].hash, false, true, true)
             else
+                local hash = clothes_list["male"][category][ClothesCache[category].model]
+
+                if not hash then return end
+
                 NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["male"][category][ClothesCache[category].model][id].hash, false, true, true)
             end
         else
             if change_type == "model" then
                 NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["female"][category][id][1].hash, false, true, true)
             else
+                local hash = clothes_list["female"][category][ClothesCache[category].model]
+
+                if not hash then return end
+
                 NativeSetPedComponentEnabled(PlayerPedId(), clothes_list["female"][category][ClothesCache[category].model][id].hash, false, true, true)
             end
         end
