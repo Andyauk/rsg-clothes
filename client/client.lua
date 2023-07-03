@@ -455,6 +455,10 @@ Citizen.CreateThread(function()
                     Citizen.InvokeNative(0xE9990552DEC71600)
                 end
                 if IsControlJustReleased(0, Config.OpenKey) then
+                    TriggerEvent('rsg-horses:client:FleeHorse')
+
+                    Wait(0)
+
                     TriggerServerEvent("rsg-clothes:LoadClothes", 2)
                 end
             else
