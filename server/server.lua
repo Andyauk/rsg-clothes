@@ -43,6 +43,7 @@ AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
     else
         TriggerClientEvent("rsg-appearance:LoadSkinClient", src)
     end
+    SetPlayerRoutingBucket(src, 0)
 end)
 
 RegisterServerEvent('rsg-clothes:LoadClothes')
@@ -63,6 +64,8 @@ AddEventHandler('rsg-clothes:LoadClothes', function(value)
         if _value == 1 then
             TriggerClientEvent("rsg-clothes:ApplyClothes", src, _clothes)
         elseif _value == 2 then
+            local BucketID = (RSGCore.Shared.RandomInt(2) .. RSGCore.Shared.RandomInt(2) .. RSGCore.Shared.RandomInt(2))
+            SetPlayerRoutingBucket(src, BucketID)
             TriggerClientEvent("rsg-clothes:OpenClothingMenu", src, _clothes)
         end
     end
