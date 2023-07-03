@@ -66,6 +66,7 @@ AddEventHandler('rsg-clothes:LoadClothes', function(value)
         elseif _value == 2 then
             local BucketID = (RSGCore.Shared.RandomInt(2) .. RSGCore.Shared.RandomInt(2) .. RSGCore.Shared.RandomInt(2))
             SetPlayerRoutingBucket(src, BucketID)
+            SetRoutingBucketPopulationEnabled(BucketID, false)
             TriggerClientEvent("rsg-clothes:OpenClothingMenu", src, _clothes)
         end
     end
