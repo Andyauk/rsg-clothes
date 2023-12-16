@@ -42,6 +42,7 @@ AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
         end
     else
         TriggerClientEvent("rsg-appearance:LoadSkinClient", src)
+        TriggerClientEvent('RSGCore:Notify', src, 'you don\'t have enough cash', 'error')
     end
     SetPlayerRoutingBucket(src, 0)
 end)
