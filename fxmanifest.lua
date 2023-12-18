@@ -23,7 +23,8 @@ server_scripts {
 
 dependencies {
     'rsg-appearance',
-    'rsg-menubase'
+    'rsg-menubase',
+    'ox_lib'
 }
 
 lua54 'yes'
