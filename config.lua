@@ -1,72 +1,101 @@
 Config = {}
-Config.Shoptext = 'Press ~INPUT_JUMP~ to open a clothing store' -- Text to open the clothing shop
-Config.Cloakroomtext = 'Press ~INPUT_JUMP~ to open the changing rooms' -- Text to open the clothing shop
-Config.BlipName = 'A clothing store' -- Blip Name Showed on map
-Config.BlipNameCloakRoom = 'Wardrobe' -- Blip Name Showed on map
+Config.Shoptext = Lang:t('title.shoptext') -- Text to open the clothing shop
+Config.Cloakroomtext = Lang:t('title.cloakroomtext') -- Text to open the clothing shop
+Config.BlipName = Lang:t('blip.shop') -- Blip Name Showed on map
+Config.BlipNameCloakRoom = Lang:t('blip.cloakroom') -- Blip Name Showed on map
 Config.BlipSprite = 1195729388	 -- Clothing shop sprite
 Config.BlipSpriteCloakRoom = 1496995379	 -- Clothing shop sprite
 Config.BlipScale = 0.2 -- Blip scale
 Config.OpenKey = 0xD9D0E1C0 -- Opening key hash
+
 Config.Zones = {
-    vector3(-325.5,774.57,117.45), -- VALENTINE
-    vector3(1326.42, -1289.56, 77.02), -- RHODES
-    vector3(2550.81,-1166.28,53.68), -- SAINT DENIS
-    vector3(-767.94,-1294.95,43.84), -- BLACK WATER
-    vector3(-1794.89,-385.22,160.33), -- STRAWBERRY
-    vector3(-3689.37,-2628.01,-13.41), -- ARMADILO
-    vector3(-5490.97,-2938.28,-0.4) -- TUMBLEWEED
+    Valentine = {
+        vector3(-326.39, 807.45, 117.89),             --blip
+        vector4(-327.765, 807.769, 117.894, 254.593), --Fitting Room
+        vector4(-326.033, 805.976, 117.882, 241.450), --QuitCoords
+    },
+    Rhodes = {
+        vector3(1323.13, -1290.26, 77.03),
+        vector4(1324.265, -1287.926, 77.018, 150.606),
+        vector4(1322.828, -1291.433, 77.028, 167.880),
+    },
+    SaintDenis = {
+        vector3(2554.90, -1166.89, 53.68),
+        vector4(2555.500, -1161.000, 53.730, 310.371),
+        vector4(2553.285, -1161.101, 53.684, 96.703),
+    },
+    BlackWater = {
+        vector3(-761.99, -1293.55, 43.84),
+        vector4(-767.951, -1294.627, 43.835, 250.153),
+        vector4(-766.549, -1293.269, 43.836, 348.399),
+    },
+    Strawberry = {
+        vector3(-1792.8, -392.96, 160.34),
+        vector4(-1794.604, -395.540, 160.336, 317.471),
+        vector4(-1791.907, -391.948, 160.266, 160.266),
+    },
+    Armadillo = {
+        vector3(-3687.866, -2630.905, -13.39525),
+        vector4(-3688.229, -2624.204, -10.218, 359.769),
+        vector4(-3687.822, -2630.876, -13.395, 73.005),
+    },
+    Tumbleweed = {
+        vector3(-5480.48, -2933.86, -0.37),
+        vector4(-5479.786, -2932.66, -0.283, 166.096),
+        vector4(-5481.510, -2935.005, -0.396, 85.180),
+    },
 }
 
 Config.Cloakroom = {
-    vector3(-325.29,766.24,117.48), -- VALENTINE
-    vector3(-1817.11,-368.77,166.54), 
-    vector3(-825.40,-1323.76,47.91), 
-    vector3(1331.86,-1377.35,80.55), 
-    vector3(2556.49,-1160.14,53.74) 
+    vector3(-325.29, 766.24, 117.48), -- VALENTINE
+    vector3(-1817.11, -368.77, 166.54), 
+    vector3(-825.40, -1323.76, 47.91), 
+    vector3(1331.86, -1377.35, 80.55), 
+    vector3(2556.49, -1160.14, 53.74) -- SAINT DENIS
 }
 
 Config.Label = {
-    ["boot_accessories"] = "Boot Accessories",
-    ["pants"] = "Pants",
-    ["cloaks"] = "Cloaks",
-    ["hats"] = "Hats",
-    ["vests"] = "Vests",
-    ["chaps"] = "Chaps",
-    ["shirts_full"] = "Shirts Full",
-    ["badges"] = "Badges",
-    ["masks"] = "Masks",
-    ["spats"] = "Spats",
-    ["neckwear"] = "Neck Wear",
-    ["boots"] = "Boots",
-    ["accessories"] = "Accessories",
-    ["jewelry_rings_right"] = "Jewelry Rings Right",
-    ["jewelry_rings_left"]    = "Jewelry Rings Reft",
-    ["jewelry_bracelets"] = "Jewelry Bracelets",
-    ["gauntlets"] = "Gaunt Lets",
-    ["neckties"] = "Neck Ties",
-    ["holsters_knife"] = "Holsters Knife",
-    ["talisman_holster"] = "Talisman Holster",
-    ["loadouts"] = "Load outs",
-    ["suspenders"] = "Suspenders",
-    ["talisman_satchel"] = "Talisman Satchel",
-    ["satchels"] = "Satchels",
-    ["gunbelts"] = "Gun Belts",
-    ["belts"] = "Belts",
-    ["belt_buckles"] = "Belt Buckles",
-    ["holsters_left"] = "Holsters Left",
-    ["holsters_right"] = "Holsters Right",
-    ["talisman_wrist"] = "Talisman Wrist",
-    ["coats"] = "Coats",
-    ["coats_closed"] = "Coats Closed",
-    ["ponchos"] = "Ponchos",
-    ["eyewear"] = "Eyewear",
-    ["gloves"] = "Gloves",
-    ["holsters_crossdraw"] = "Holsters Crossdraw",
-    ["aprons"] = "Aprons",
-    ["skirts"] = "Skirts",
-    ["hair_accessories"] = "Hair Accessories",
-    ["armor"] = "Armor",
-    ["dresses"] = "Dresses",
+    ["boot_accessories"] = Lang:t('ctitle.boot_accessories'),
+    ["pants"] = Lang:t('ctitle.pants'),
+    ["cloaks"] = Lang:t('ctitle.cloaks'),
+    ["hats"] = Lang:t('ctitle.hats'),
+    ["vests"] = Lang:t('ctitle.vests'),
+    ["chaps"] = Lang:t('ctitle.chaps'),
+    ["shirts_full"] = Lang:t('ctitle.shirts_full'),
+    ["badges"] = Lang:t('ctitle.badges'),
+    ["masks"] = Lang:t('ctitle.masks'),
+    ["spats"] = Lang:t('ctitle.spats'),
+    ["neckwear"] = Lang:t('ctitle.neckwear'),
+    ["boots"] = Lang:t('ctitle.boots'),
+    ["accessories"] = Lang:t('ctitle.accessories'),
+    ["jewelry_rings_right"] = Lang:t('ctitle.jewelry_rings_right'),
+    ["jewelry_rings_left"] = Lang:t('ctitle.jewelry_rings_left'),
+    ["jewelry_bracelets"] = Lang:t('ctitle.jewelry_bracelets'),
+    ["gauntlets"] = Lang:t('ctitle.gauntlets'),
+    ["neckties"] = Lang:t('ctitle.neckties'),
+    ["holsters_knife"] = Lang:t('ctitle.holsters_knife'),
+    ["talisman_holster"] = Lang:t('ctitle.talisman_holster'),
+    ["loadouts"] = Lang:t('ctitle.loadouts'),
+    ["suspenders"] = Lang:t('ctitle.suspenders'),
+    ["talisman_satchel"] = Lang:t('ctitle.talisman_satchel'),
+    ["satchels"] = Lang:t('ctitle.satchels'),
+    ["gunbelts"] = Lang:t('ctitle.gunbelts'),
+    ["belts"] = Lang:t('ctitle.belts'),
+    ["belt_buckles"] = Lang:t('ctitle.belt_buckles'),
+    ["holsters_left"] = Lang:t('ctitle.holsters_left'),
+    ["holsters_right"] = Lang:t('ctitle.holsters_right'),
+    ["talisman_wrist"] = Lang:t('ctitle.talisman_wrist'),
+    ["coats"] = Lang:t('ctitle.coats'),
+    ["coats_closed"] = Lang:t('ctitle.coats_closed'),
+    ["ponchos"] = Lang:t('ctitle.ponchos'),
+    ["eyewear"] = Lang:t('ctitle.eyewear'),
+    ["gloves"] = Lang:t('ctitle.gloves'),
+    ["holsters_crossdraw"] = Lang:t('ctitle.holsters_crossdraw'),
+    ["aprons"] = Lang:t('ctitle.aprons'),
+    ["skirts"] = Lang:t('ctitle.skirts'),
+    ["hair_accessories"] = Lang:t('ctitle.hair_accessories'),
+    ["armor"] = Lang:t('ctitle.armor'),
+    ["dresses"] = Lang:t('ctitle.dresses'),
 }
 
 Config.Price = {
@@ -115,7 +144,7 @@ Config.Price = {
 
 Config.MenuElements = {
     ["head"] = {
-        label = "Head",
+        label = Lang:t('menu.head'),
         category = {
             "hats",
             "eyewear",
@@ -126,7 +155,7 @@ Config.MenuElements = {
     },
 
     ["torso"] = {
-        label = "Torso",
+        label = Lang:t('menu.torso'),
         category = {
             "cloaks",
             "vests",
@@ -146,7 +175,7 @@ Config.MenuElements = {
     },
 
     ["legs"] = {
-        label = "Legs",
+        label = Lang:t('menu.legs'),
         category = {
             "pants",
             "chaps",
@@ -154,7 +183,7 @@ Config.MenuElements = {
         }
     },
     ["foot"] = {
-        label = "Foot",
+        label = Lang:t('menu.foot'),
         category = {
             "boots",
             "spats",
@@ -163,7 +192,7 @@ Config.MenuElements = {
     },
 
     ["hands"] = {
-        label = "Hands",
+        label = Lang:t('menu.hands'),
         category = {
             "jewelry_rings_right",
             "jewelry_rings_left",
@@ -174,7 +203,7 @@ Config.MenuElements = {
     },
 
     ["accessories"] = {
-        label = "Accessories",
+        label = Lang:t('menu.accessories'),
         category = {
             "accessories",
             "talisman_wrist",

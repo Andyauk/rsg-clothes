@@ -3,16 +3,19 @@ rdr3_warning 'I acknowledge that this is a prerelease build of RedM, and I am aw
 game 'rdr3'
 
 description 'rsg-clothes'
-version '1.0.3'
+version '1.0.4'
 
 shared_scripts {
-    'config.lua'
+    '@rsg-core/shared/locale.lua',    
+    'locales/en.lua',
+    'locales/*.lua',
+    'config.lua',
 }
 
 client_scripts {
     'utils/clotheslist.lua',
     'utils/functions.lua',
-    'client/client.lua'
+    'client/client.lua',
 }
 
 server_scripts {
@@ -22,9 +25,10 @@ server_scripts {
 }
 
 dependencies {
+    'rsg-core',
     'rsg-appearance',
     'rsg-menubase',
-    'ox_lib'
+    'ox_lib',
 }
 
 lua54 'yes'

@@ -1,8 +1,11 @@
+local RSGCore = exports['rsg-core']:GetCoreObject()
 local ClothingCamera = nil
-local c_zoom = 2.8
+local c_zoom = 2.4
 local c_offset = -0.15
 local Outfits_tab = {}
 local CurrentPrice = 0
+local CurentCoords = {}
+local playerHeading = nil
 
 MenuData = {}
 TriggerEvent("rsg-menubase:getData", function(call)
@@ -12,20 +15,20 @@ end)
 function OpenClothingMenu()
     MenuData.CloseAll()
     local elements = {}
+
     for v, k in pairsByKeys(Config.MenuElements) do
         table.insert(elements, {label = k.label or v, value = v, category = v, desc = ""})
     end
-    table.insert(elements, {label = Config.Label["save"] or "Save", value = "save", desc = ""})
+    table.insert(elements, {label = Lang:t('menu.save') or "Save", value = "save", desc = ""})
     MenuData.Open('default', GetCurrentResourceName(), 'clothing_store_menu',
-            {title = 'Clothes', subtext = 'Options', align = 'top-left', elements = elements}, function(data, menu)
+            {title = Lang:t('title.clothes'), subtext = Lang:t('title.options'), align = 'top-left', elements = elements}, function(data, menu)
         if data.current.value ~= "save" then
             OpenCateogry(data.current.value)
         else
-            destory()
             menu.close()
             local output = nil
-            AddTextEntry('FMMC_MPM_NA', "The name of the outfit:")
-            DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "name", "", "", "", 30)
+            AddTextEntry('FMMC_MPM_NA', Lang:t('menu.save_outfits'))
+            DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", Lang:t('menu.name_outfits'), "", "", "", 30)
             while (UpdateOnscreenKeyboard() == 0) do
                 DisableAllControlActions(0)
                 Citizen.Wait(0)
@@ -35,16 +38,25 @@ function OpenClothingMenu()
             end
             saveOutfit = true
             TriggerServerEvent("rsg-clothes:Save", ClothesCache, output, CurrentPrice)
-            OldClothesCache = {}
+            destory()
+            if next(CurentCoords) == nil then
+                CurentCoords = Config.Zones.Valentine
+                --TeleportAndFade(CurentCoords[3], true)
+            end
+            TeleportAndFade(CurentCoords[3], true)
         end
     end, function(data, menu)
         menu.close()
-        OldClothesCache = {}
         destory()
         local currentHealth = GetEntityHealth(PlayerPedId())
         local maxStamina = Citizen.InvokeNative(0xCB42AFE2B613EE55, PlayerPedId(), Citizen.ResultAsFloat())
         local currentStamina = Citizen.InvokeNative(0x775A1CA7893AA8B5, PlayerPedId(), Citizen.ResultAsFloat()) / maxStamina * 100
         TriggerServerEvent("rsg-appearance:LoadSkin")
+        if next(CurentCoords) == nil then
+            CurentCoords = Config.Zones.Valentine
+            --TeleportAndFade(CurentCoords[3], true)
+        end
+        TeleportAndFade(CurentCoords[3], true)
         Wait(1000)
         SetEntityHealth(PlayerPedId(), currentHealth )
         Citizen.InvokeNative(0xC3D4B754C0E86B9E, PlayerPedId(), currentStamina)
@@ -77,7 +89,7 @@ function OpenCateogry(menu_catagory)
                     table.insert(options, i)
                 end
                 table.insert(elements,
-                    {label = "Color " .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
+                    {label = Lang:t('menu.color') .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
                 )
                 options = {}
                 a = a + 1
@@ -106,7 +118,7 @@ function OpenCateogry(menu_catagory)
                     table.insert(options, i)
                 end
                 table.insert(elements,
-                    {label = "Color " .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
+                    {label = Lang:t('menu.color') .. Config.Label[k] or v, value = ClothesCache[k].texture or 1, category = k, desc = "", type = "slider", min = 1, max = GetMaxTexturesForModel(k, ClothesCache[k].model or 1), change_type = "texture", id = a, options = options}
                 )
                 options = {}
                 a = a + 1
@@ -114,7 +126,7 @@ function OpenCateogry(menu_catagory)
         end
     end
     MenuData.Open('default', GetCurrentResourceName(), 'clothing_store_menu_category',
-        {title = 'Clothes', subtext = 'Options', align = 'top-left', elements = elements}, function(data, menu)
+        {title = Lang:t('title.clothes'), subtext = Lang:t('title.options'), align = 'top-left', elements = elements}, function(data, menu)
     end, function(data, menu)
         menu.close()
         OpenClothingMenu()
@@ -182,27 +194,27 @@ function ClothingLight()
     Citizen.CreateThread(function()
         while ClothingCamera do
             Wait(0)
-            if IsDisabledControlPressed(0, 0x06052D11) then
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then --0xB4E465B4 D
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading + 2)
             end
-            if IsDisabledControlPressed(0, 0x110AD1D2) then
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then --0x7065027D A
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
             end
-            if IsDisabledControlPressed(0, 0xFD0F0C2C) then
-                if c_zoom + 0.25 < 2.8 and c_zoom + 0.25 > 0.7 then
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['S']) then --0xD27782E3 S
+                if c_zoom + 0.25 < 2.5 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, 0xCC1075A7) then
-                if c_zoom - 0.25 < 2.8 and c_zoom - 0.25 > 0.7 then
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['W']) then --0x8FD015D8 W
+                if c_zoom - 0.25 < 2.5 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, 0x53296B75) then
+            if IsDisabledControlPressed(0, 0x53296B75) then --0x53296B75 правая зажатая кнопка мышки и водить вверх-вниз
                 local cursor_y = -0.5 + GetDisabledControlNormal(0, `INPUT_CURSOR_Y`)
                 if c_offset - cursor_y / 7 < 1.2 and c_offset - cursor_y / 7 > -1.0 then
                     c_offset = c_offset - cursor_y / 7
@@ -217,8 +229,8 @@ function ClothingLight()
             DisableAllControlActions(0)
             DisableAllControlActions(1)
             DisableAllControlActions(2)
-            local coords = GetEntityCoords(PlayerPedId())
-            DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 5.5, 5.0)
+            --local coords = GetEntityCoords(PlayerPedId())
+            --DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 5.5, 5.0)
         end
     end)
 end
@@ -244,7 +256,7 @@ AddEventHandler('rsg-clothes:OpenClothingMenu', function(ClothesComponents)
         end
     end
     OldClothesCache = deepcopy(ClothesCache)
-    camera(2.8, -0.15)
+    camera(2.4, -0.15)
     ClothingLight()
     OpenClothingMenu()
 end)
@@ -326,60 +338,90 @@ AddEventHandler('rsg-clothes:ApplyClothes', function(ClothesComponents, Target)
 end)
 
 function destory()
+    OldClothesCache = {}
     SetCamActive(ClothingCamera, false)
     RenderScriptCams(false, true, 500, true, true)
     DisplayHud(true)
     DisplayRadar(true)
     DestroyAllCams(true)
-    ClothingCamera = nil
+    ClothingCamera = nil    
+    playerHeading = nil
+end
+
+function TeleportAndFade(coords4, resetCoords)
+    DoScreenFadeOut(500)
+    Wait(1000)
+    Citizen.InvokeNative(0x203BEFFDBE12E96A, PlayerPedId(), coords4)
+    SetEntityCoordsNoOffset(PlayerPedId(), coords4, true, true, true)
+    --Citizen.InvokeNative(0x0918E3565C20F03C, PlayerPedId(), coords4, true, true) --_SET_ENTITY_COORDS_AND_HEADING_NO_OFFSET
+    Wait(1500)
+    DoScreenFadeIn(1800)
+    if resetCoords then
+        CurentCoords = {}
+    end
 end
 
 function camera(zoom, offset)
     local playerPed = PlayerPedId()
     local coords = GetEntityCoords(playerPed)
-    local heading = 45.0
     local zoomOffset = zoom
-    local camOffset = offset
-    local angle = heading * math.pi / 180.0
-    local theta = {
-        x = math.cos(angle),
-        y = math.sin(angle)
-    }
+    local angle
+    
+
+    if playerHeading == nil then
+        playerHeading = GetEntityHeading(playerPed)
+        angle = playerHeading * math.pi / 180.0
+    else
+        angle = playerHeading * math.pi / 180.0
+    end
+    
+
     local pos = {
-        x = coords.x + (zoomOffset * theta.x),
-        y = coords.y + (zoomOffset * theta.y)
+        x = coords.x - (zoomOffset * math.sin(angle)),
+        y = coords.y + (zoomOffset * math.cos(angle)),
+        z = coords.z + offset
     }
+    
     if not ClothingCamera then
+
         DestroyAllCams(true)
-        ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset, 300.00, 0.00, 0.00, 40.00, false, 0)
+        ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
+        --PointCamAtEntity(ClothingCamera, playerPed, 0.0, 0.0, 0.0, true)
+        
         local pCoords = GetEntityCoords(PlayerPedId())
-        PointCamAtCoord(ClothingCamera, pCoords.x, pCoords.y, pCoords.z + camOffset)
+        PointCamAtCoord(ClothingCamera, pCoords.x, pCoords.y, pCoords.z + offset)
+        
         SetCamActive(ClothingCamera, true)
         RenderScriptCams(true, true, 1000, true, true)
         DisplayRadar(false)
-        SetEntityHeading(playerPed, 334.0)
+        --SetEntityHeading(playerPed, 334.0)
     else
-        local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, coords.z + camOffset, 300.00, 0.00, 0.00, 40.00, false, 0)
+
+        local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
         SetCamActive(ClothingCamera2, true)
         SetCamActiveWithInterp(ClothingCamera2, ClothingCamera, 750)
+        --PointCamAtEntity(ClothingCamera2, playerPed, 0.0, 0.0, 0.0, true)
+        
         local pCoords = GetEntityCoords(PlayerPedId())
-        PointCamAtCoord(ClothingCamera2, pCoords.x, pCoords.y, pCoords.z + camOffset)
+        PointCamAtCoord(ClothingCamera2, pCoords.x, pCoords.y, pCoords.z + offset)
+        
         Wait(150)
         SetCamActive(ClothingCamera, false)
         DestroyCam(ClothingCamera)
         ClothingCamera = ClothingCamera2
     end
-
 end
 
 Citizen.CreateThread(function()
-    for k, v in pairs(Config.Zones) do
-        local blip = N_0x554d9d53f696d002(1664425300, v)
-        SetBlipSprite(blip, Config.BlipSprite, 1)
-        SetBlipScale(blip, Config.BlipScale)
-        Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipName)
+    for _, coordsList in pairs(Config.Zones) do
+        if #coordsList > 0 then    
+            local blip = N_0x554d9d53f696d002(1664425300, coordsList[1])
+            SetBlipSprite(blip, Config.BlipSprite, 1)
+            SetBlipScale(blip, Config.BlipScale)
+            Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipName)
+        end
     end
-    for k, v in pairs(Config.Cloakroom) do
+    for _, v in pairs(Config.Cloakroom) do
         local blip = N_0x554d9d53f696d002(1664425300, v)
         SetBlipSprite(blip, Config.BlipSpriteCloakRoom, 1)
         SetBlipScale(blip, Config.BlipScale)
@@ -407,12 +449,12 @@ function Outfits()
     local elements_outfits = {}
     if Outfits_tab ~= nil then
         for j, z in pairs(Outfits_tab) do
-            table.insert(elements_outfits, {label = Outfits_tab[j].name, value = Outfits_tab[j].name, desc = "choose your clothes"})
+            table.insert(elements_outfits, {label = Outfits_tab[j].name, value = Outfits_tab[j].name, desc = Lang:t('title.choose')})
         end
     end
     MenuData.CloseAll()
     MenuData.Open('default', GetCurrentResourceName(), 'outfits_menu',
-        {title = 'Clothes', subtext = 'choose your clothes', align = 'top-left', elements = elements_outfits}, function(data, menu)
+        {title = Lang:t('title.clothes'), subtext = Lang:t('title.choose'), align = 'top-left', elements = elements_outfits}, function(data, menu)
         OutfitsManage(data.current.value)
     end, function(data, menu)
         menu.close()
@@ -420,14 +462,14 @@ function Outfits()
 end
 
 local elements_outfits_manage = {
-    {label = "wear", value = "SetOutfits", desc = "dress up"},
-    {label = "delete outfit", value = "DeleteOutfit", desc = ""}
+    {label = Lang:t('title.wear'), value = "SetOutfits", desc = Lang:t('title.wear_desc')},
+    {label = Lang:t('title.delete'), value = "DeleteOutfit", desc = Lang:t('title.delete_desc')}
 }
 
 function OutfitsManage(outfit)
     MenuData.CloseAll()
     MenuData.Open('default', GetCurrentResourceName(), 'outfits_menu_manage',
-        {title = 'Clothes', subtext = 'Options', align = 'top-left', elements = elements_outfits_manage}, function(data, menu)
+        {title = Lang:t('title.clothes'), subtext = Lang:t('title.options'), align = 'top-left', elements = elements_outfits_manage}, function(data, menu)
         menu.close()
         TriggerServerEvent('rsg-clothes:' .. data.current.value, outfit)
     end, function(data, menu)
@@ -443,11 +485,14 @@ Citizen.CreateThread(function()
         local canwait = true
         local playerPed = PlayerPedId()
         local coords = GetEntityCoords(playerPed)
-        if isCreatorOpened then
-            DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 2.5, 10.0)
-        end
+
+        --if isCreatorOpened then
+        --    DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 2.5, 10.0)
+        --end
+
         for k, v in pairs(Config.Zones) do
-            local dist = Vdist(coords, v)
+
+            local dist = #(coords - v[1])
             if dist < 2 then
                 if dist < 20 then
                     canwait = false
@@ -462,8 +507,9 @@ Citizen.CreateThread(function()
                 end
                 if IsControlJustReleased(0, Config.OpenKey) then
                     TriggerEvent('rsg-horses:client:FleeHorse')
-
                     Wait(0)
+                    CurentCoords = v
+                    TeleportAndFade(CurentCoords[2], false)
 
                     TriggerServerEvent("rsg-clothes:LoadClothes", 2)
                 end
@@ -477,6 +523,7 @@ Citizen.CreateThread(function()
                 end
             end
         end
+
         if canwait then
             Wait(1000)
         end
@@ -526,7 +573,7 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         local coords = GetEntityCoords(playerPed)
         for k,v in pairs(Config.Cloakroom) do
-            local dist =  Vdist(coords, v)
+            local dist =  #(coords - v)
             if dist < 2 then
                 if dist  < 20 then
                     canwait = false
@@ -540,6 +587,7 @@ Citizen.CreateThread(function()
                 end
                 if IsControlJustReleased(0, Config.OpenKey) or IsDisabledControlJustReleased(0, Config.OpenKey) then
                     TriggerEvent('rsg-clothes:OpenOutfits')
+                    
                 end
             else
                 if active2 and k == target2 then
