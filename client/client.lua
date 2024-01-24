@@ -7,6 +7,14 @@ local CurrentPrice = 0
 local CurentCoords = {}
 local playerHeading = nil
 
+-- set clothing door state
+Citizen.CreateThread(function()
+    for _,v in pairs(Config.SetDoorState) do
+        Citizen.InvokeNative(0xD99229FE93B46286, v.door, 1, 1, 0, 0, 0, 0)
+        Citizen.InvokeNative(0x6BAB9442830C7F53, v.door, v.state)
+    end
+end)
+
 MenuData = {}
 TriggerEvent("rsg-menubase:getData", function(call)
     MenuData = call

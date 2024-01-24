@@ -8,6 +8,17 @@ Config.BlipSpriteCloakRoom = 1496995379	 -- Clothing shop sprite
 Config.BlipScale = 0.2 -- Blip scale
 Config.OpenKey = 0xD9D0E1C0 -- Opening key hash
 
+Config.SetDoorState = {
+    -- open = 0 / locked = 1
+    { door = 3554893730, state = 1 }, -- valentine
+    { door = 2432590327, state = 1 }, -- rhodes
+    { door = 3804893186, state = 1 }, -- saint dennis
+    { door = 3277501452, state = 1 }, -- blackwater
+    { door = 94437577,   state = 1 }, -- strawberry
+    { door = 3315914718, state = 1 }, -- armadillo
+    { door = 3208189941, state = 1 }, -- tumbleweed
+}
+
 Config.Zones = {
     Valentine = {
         vector3(-326.39, 807.45, 117.89),             --blip
