@@ -50,7 +50,7 @@ Config.Cloakroom = {
     vector3(-325.29, 766.24, 117.48), -- VALENTINE
     vector3(-1817.11, -368.77, 166.54), -- Strawberry
     vector3(-825.40, -1323.76, 47.91), -- BlackWater
-    vector3(1331.86, -1377.35, 80.55), 
+    vector3(1331.86, -1377.35, 80.55), -- Rhodes
     vector3(2556.49, -1160.14, 53.74) -- SAINT DENIS
 }
 
