@@ -49,7 +49,6 @@ function OpenClothingMenu()
             destory()
             if next(CurentCoords) == nil then
                 CurentCoords = Config.Zones.Valentine
-                --TeleportAndFade(CurentCoords[3], true)
             end
             TeleportAndFade(CurentCoords[3], true)
         end
@@ -62,7 +61,6 @@ function OpenClothingMenu()
         TriggerServerEvent("rsg-appearance:LoadSkin")
         if next(CurentCoords) == nil then
             CurentCoords = Config.Zones.Valentine
-            --TeleportAndFade(CurentCoords[3], true)
         end
         TeleportAndFade(CurentCoords[3], true)
         Wait(1000)
@@ -202,27 +200,27 @@ function ClothingLight()
     Citizen.CreateThread(function()
         while ClothingCamera do
             Wait(0)
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then --0xB4E465B4 D
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading + 2)
             end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then --0x7065027D A
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
             end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLDOWN']) then --0xD27782E3
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLDOWN']) then
                 if c_zoom + 0.25 < 2.5 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLUP']) then --0x8FD015D8
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLUP']) then
                 if c_zoom - 0.25 < 2.5 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, 0x53296B75) then --0x53296B75 правая зажатая кнопка мышки и водить вверх-вниз
+            if IsDisabledControlPressed(0, 0x53296B75) then
                 local cursor_y = -0.5 + GetDisabledControlNormal(0, `INPUT_CURSOR_Y`)
                 if c_offset - cursor_y / 7 < 1.2 and c_offset - cursor_y / 7 > -1.0 then
                     c_offset = c_offset - cursor_y / 7
@@ -237,8 +235,6 @@ function ClothingLight()
             DisableAllControlActions(0)
             DisableAllControlActions(1)
             DisableAllControlActions(2)
-            --local coords = GetEntityCoords(PlayerPedId())
-            --DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 5.5, 5.0)
         end
     end)
 end
@@ -361,7 +357,6 @@ function TeleportAndFade(coords4, resetCoords)
     Wait(1000)
     Citizen.InvokeNative(0x203BEFFDBE12E96A, PlayerPedId(), coords4)
     SetEntityCoordsNoOffset(PlayerPedId(), coords4, true, true, true)
-    --Citizen.InvokeNative(0x0918E3565C20F03C, PlayerPedId(), coords4, true, true) --_SET_ENTITY_COORDS_AND_HEADING_NO_OFFSET
     Wait(1500)
     DoScreenFadeIn(1800)
     if resetCoords then
@@ -394,7 +389,6 @@ function camera(zoom, offset)
 
         DestroyAllCams(true)
         ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
-        --PointCamAtEntity(ClothingCamera, playerPed, 0.0, 0.0, 0.0, true)
         
         local pCoords = GetEntityCoords(PlayerPedId())
         PointCamAtCoord(ClothingCamera, pCoords.x, pCoords.y, pCoords.z + offset)
@@ -402,13 +396,11 @@ function camera(zoom, offset)
         SetCamActive(ClothingCamera, true)
         RenderScriptCams(true, true, 1000, true, true)
         DisplayRadar(false)
-        --SetEntityHeading(playerPed, 334.0)
     else
 
         local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
         SetCamActive(ClothingCamera2, true)
         SetCamActiveWithInterp(ClothingCamera2, ClothingCamera, 750)
-        --PointCamAtEntity(ClothingCamera2, playerPed, 0.0, 0.0, 0.0, true)
         
         local pCoords = GetEntityCoords(PlayerPedId())
         PointCamAtCoord(ClothingCamera2, pCoords.x, pCoords.y, pCoords.z + offset)
@@ -493,10 +485,6 @@ Citizen.CreateThread(function()
         local canwait = true
         local playerPed = PlayerPedId()
         local coords = GetEntityCoords(playerPed)
-
-        --if isCreatorOpened then
-        --    DrawLightWithRange(coords.x + 1, coords.y + 1, coords.z + 1, 255, 255, 255, 2.5, 10.0)
-        --end
 
         for k, v in pairs(Config.Zones) do
 
