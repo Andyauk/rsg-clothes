@@ -210,13 +210,13 @@ function ClothingLight()
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
             end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['S']) then --0xD27782E3 S
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLDOWN']) then --0xD27782E3
                 if c_zoom + 0.25 < 2.5 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['W']) then --0x8FD015D8 W
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLUP']) then --0x8FD015D8
                 if c_zoom - 0.25 < 2.5 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
                     camera(c_zoom, c_offset)
