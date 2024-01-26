@@ -7,11 +7,11 @@ local CurrentPrice = 0
 local CurentCoords = {}
 local playerHeading = nil
 
--- set clothing door state
+ --set clothing door state
 Citizen.CreateThread(function()
     for _,v in pairs(Config.SetDoorState) do
         Citizen.InvokeNative(0xD99229FE93B46286, v.door, 1, 1, 0, 0, 0, 0)
-        Citizen.InvokeNative(0x6BAB9442830C7F53, v.door, v.state)
+        DoorSystemSetDoorState(v.door, v.state)
     end
 end)
 
@@ -21,7 +21,7 @@ TriggerEvent("rsg-menubase:getData", function(call)
 end)
 
 function OpenClothingMenu()
-    MenuData.CloseAll()
+MenuData.CloseAll()
     local elements = {}
 
     for v, k in pairsByKeys(Config.MenuElements) do
@@ -48,9 +48,9 @@ function OpenClothingMenu()
             TriggerServerEvent("rsg-clothes:Save", ClothesCache, output, CurrentPrice)
             destory()
             if next(CurentCoords) == nil then
-                CurentCoords = Config.Zones.Valentine
+                CurentCoords = Config.Zones1[1]
             end
-            TeleportAndFade(CurentCoords[3], true)
+            TeleportAndFade(CurentCoords.quitcoords, true)
         end
     end, function(data, menu)
         menu.close()
@@ -60,9 +60,9 @@ function OpenClothingMenu()
         local currentStamina = Citizen.InvokeNative(0x775A1CA7893AA8B5, PlayerPedId(), Citizen.ResultAsFloat()) / maxStamina * 100
         TriggerServerEvent("rsg-appearance:LoadSkin")
         if next(CurentCoords) == nil then
-            CurentCoords = Config.Zones.Valentine
+            CurentCoords = Config.Zones1[1]
         end
-        TeleportAndFade(CurentCoords[3], true)
+        TeleportAndFade(CurentCoords.quitcoords, true)
         Wait(1000)
         SetEntityHealth(PlayerPedId(), currentHealth )
         Citizen.InvokeNative(0xC3D4B754C0E86B9E, PlayerPedId(), currentStamina)
@@ -235,6 +235,19 @@ function ClothingLight()
             DisableAllControlActions(0)
             DisableAllControlActions(1)
             DisableAllControlActions(2)
+
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x62800C92, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x53296B75, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x62800C92, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x53296B75, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x62800C92, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x53296B75, true)
+
+            TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_OUT", "ZOOM_IN" }, true)
+
         end
     end)
 end
@@ -348,7 +361,7 @@ function destory()
     DisplayHud(true)
     DisplayRadar(true)
     DestroyAllCams(true)
-    ClothingCamera = nil    
+    ClothingCamera = nil
     playerHeading = nil
 end
 
@@ -361,6 +374,7 @@ function TeleportAndFade(coords4, resetCoords)
     DoScreenFadeIn(1800)
     if resetCoords then
         CurentCoords = {}
+        TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_OUT", "ZOOM_IN" }, false)
     end
 end
 
@@ -369,7 +383,6 @@ function camera(zoom, offset)
     local coords = GetEntityCoords(playerPed)
     local zoomOffset = zoom
     local angle
-    
 
     if playerHeading == nil then
         playerHeading = GetEntityHeading(playerPed)
@@ -377,7 +390,6 @@ function camera(zoom, offset)
     else
         angle = playerHeading * math.pi / 180.0
     end
-    
 
     local pos = {
         x = coords.x - (zoomOffset * math.sin(angle)),
@@ -386,48 +398,29 @@ function camera(zoom, offset)
     }
     
     if not ClothingCamera then
-
         DestroyAllCams(true)
         ClothingCamera = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
-        
+
         local pCoords = GetEntityCoords(PlayerPedId())
         PointCamAtCoord(ClothingCamera, pCoords.x, pCoords.y, pCoords.z + offset)
-        
+
         SetCamActive(ClothingCamera, true)
         RenderScriptCams(true, true, 1000, true, true)
         DisplayRadar(false)
     else
-
         local ClothingCamera2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", pos.x, pos.y, pos.z, 300.00, 0.00, 0.00, 50.00, false, 0)
         SetCamActive(ClothingCamera2, true)
         SetCamActiveWithInterp(ClothingCamera2, ClothingCamera, 750)
-        
+
         local pCoords = GetEntityCoords(PlayerPedId())
         PointCamAtCoord(ClothingCamera2, pCoords.x, pCoords.y, pCoords.z + offset)
-        
+
         Wait(150)
         SetCamActive(ClothingCamera, false)
         DestroyCam(ClothingCamera)
         ClothingCamera = ClothingCamera2
     end
 end
-
-Citizen.CreateThread(function()
-    for _, coordsList in pairs(Config.Zones) do
-        if #coordsList > 0 then    
-            local blip = N_0x554d9d53f696d002(1664425300, coordsList[1])
-            SetBlipSprite(blip, Config.BlipSprite, 1)
-            SetBlipScale(blip, Config.BlipScale)
-            Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipName)
-        end
-    end
-    for _, v in pairs(Config.Cloakroom) do
-        local blip = N_0x554d9d53f696d002(1664425300, v)
-        SetBlipSprite(blip, Config.BlipSpriteCloakRoom, 1)
-        SetBlipScale(blip, Config.BlipScale)
-        Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipNameCloakRoom)
-    end
-end)
 
 RegisterNetEvent('rsg-clothes:OpenOutfits')
 AddEventHandler('rsg-clothes:OpenOutfits', function()
@@ -476,55 +469,6 @@ function OutfitsManage(outfit)
         Outfits()
     end)
 end
-
-local active = false
-local target
-Citizen.CreateThread(function()
-    while true do
-        Wait(1)
-        local canwait = true
-        local playerPed = PlayerPedId()
-        local coords = GetEntityCoords(playerPed)
-
-        for k, v in pairs(Config.Zones) do
-
-            local dist = #(coords - v[1])
-            if dist < 2 then
-                if dist < 20 then
-                    canwait = false
-                end
-                if not active then
-                    active = true
-                    target = k
-                    local str = Citizen.InvokeNative(0xFA925AC00EB830B9, 10, "LITERAL_STRING", Config.Shoptext,
-                    Citizen.ResultAsLong())
-                    Citizen.InvokeNative(0xFA233F8FE190514C, str)
-                    Citizen.InvokeNative(0xE9990552DEC71600)
-                end
-                if IsControlJustReleased(0, Config.OpenKey) then
-                    TriggerEvent('rsg-horses:client:FleeHorse')
-                    Wait(0)
-                    CurentCoords = v
-                    TeleportAndFade(CurentCoords[2], false)
-
-                    TriggerServerEvent("rsg-clothes:LoadClothes", 2)
-                end
-            else
-                if active and k == target then
-                    local str = Citizen.InvokeNative(0xFA925AC00EB830B9, 10, "LITERAL_STRING", " ",
-                        Citizen.ResultAsLong())
-                    Citizen.InvokeNative(0xFA233F8FE190514C, str)
-                    Citizen.InvokeNative(0xE9990552DEC71600)
-                    active = false
-                end
-            end
-        end
-
-        if canwait then
-            Wait(1000)
-        end
-    end
-end)
 
 exports('GetClothesComponents', function()
     return {ComponentsClothesMale, ComponentsClothesFemale}
@@ -583,7 +527,6 @@ Citizen.CreateThread(function()
                 end
                 if IsControlJustReleased(0, Config.OpenKey) or IsDisabledControlJustReleased(0, Config.OpenKey) then
                     TriggerEvent('rsg-clothes:OpenOutfits')
-                    
                 end
             else
                 if active2 and k == target2 then
@@ -596,6 +539,121 @@ Citizen.CreateThread(function()
         end
         if canwait then
             Wait(1000)
+        end
+    end
+end)
+
+RegisterNetEvent('rsg-clothes:StartOutfits')
+AddEventHandler('rsg-clothes:StartOutfits', function()
+    TriggerEvent('rsg-horses:client:FleeHorse')
+    Wait(0)
+    TeleportAndFade(CurentCoords.fittingcoords, false)
+    TriggerServerEvent("rsg-clothes:LoadClothes", 2)
+end)
+
+Citizen.CreateThread(function()
+    CreateBlips()
+    if RegisterPrompts() then
+        local room = false
+
+        while true do
+            room = GetClosestConsumer()
+
+            if room then
+                if not PromptsEnabled then TogglePrompts({ "OPEN_CLOTHING_MENU" }, true) end
+                if PromptsEnabled then
+                    if IsPromptCompleted("OPEN_CLOTHING_MENU") then
+                        TriggerEvent("rsg-clothes:StartOutfits")
+                    end
+                end
+            else 
+                if PromptsEnabled then TogglePrompts({ "OPEN_CLOTHING_MENU" }, false) end
+                Citizen.Wait(250) 
+            end
+            Citizen.Wait(100)
+        end
+    end
+end)
+
+local playerCoords = nil
+GetClosestConsumer = function()
+    playerCoords = GetEntityCoords(PlayerPedId())
+
+    for _,data in pairs(Config.Zones1) do
+        if #(playerCoords - data.promtcoords) < 1.0 then
+            CurentCoords = data
+            return true
+        end
+    end
+    return false
+end
+
+RegisterPrompts = function()
+    local newTable = {}
+
+    for i=1, #Config.Prompts do
+        local prompt = Citizen.InvokeNative(0x04F97DE45A519419, Citizen.ResultAsInteger())
+        Citizen.InvokeNative(0x5DD02A8318420DD7, prompt, CreateVarString(10, "LITERAL_STRING", Config.Prompts[i].label))
+        Citizen.InvokeNative(0xB5352B7494A08258, prompt, Config.Prompts[i].control or RSGCore.Shared.Keybinds[Config.Keybind])
+        Citizen.InvokeNative(0x94073D5CA3F16B7B, prompt, Config.Prompts[i].time or 1000)
+        Citizen.InvokeNative(0xF7AA2696A22AD8B9, prompt)
+        Citizen.InvokeNative(0x8A0FB4D03A630D21, prompt, false)
+        Citizen.InvokeNative(0x71215ACCFDE075EE, prompt, false)
+		
+        table.insert(Config.CreatedEntries, { type = "PROMPT", handle = prompt })
+        newTable[Config.Prompts[i].id] = prompt
+    end
+
+    Config.Prompts = newTable
+    return true
+end
+
+TogglePrompts = function(data, state)
+    for index,prompt in pairs((data ~= "ALL" and data) or Config.Prompts) do
+        if Config.Prompts[(data ~= "ALL" and prompt) or index] then
+            Citizen.InvokeNative(0x8A0FB4D03A630D21, (data ~= "ALL" and Config.Prompts[prompt]) or prompt, state)
+            Citizen.InvokeNative(0x71215ACCFDE075EE, (data ~= "ALL" and Config.Prompts[prompt]) or prompt, state)
+        end
+    end
+    PromptsEnabled = state
+end
+
+IsPromptCompleted = function(name)
+    if Config.Prompts[name] then
+        return Citizen.InvokeNative(0xE0F65F0640EF0617, Config.Prompts[name])
+    end 
+    return false
+end
+
+-- blips
+CreateBlips = function()
+    for _, coordsList in pairs(Config.Zones1) do
+        if #coordsList.blipcoords > 0 and coordsList.showblip then
+            local blip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, coordsList.blipcoords)
+            SetBlipSprite(blip, Config.BlipSprite, 1)
+            SetBlipScale(blip, Config.BlipScale)
+            Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipName)
+            
+            table.insert(Config.CreatedEntries, { type = "BLIP", handle = blip })
+        end
+    end
+    for _, v in pairs(Config.Cloakroom) do
+        local blip = Citizen.InvokeNative(0x554D9D53F696D002, 1664425300, v)
+        SetBlipSprite(blip, Config.BlipSpriteCloakRoom, 1)
+        SetBlipScale(blip, Config.BlipScale)
+        Citizen.InvokeNative(0x9CB1A1623062F402, blip, Config.BlipNameCloakRoom)
+
+        table.insert(Config.CreatedEntries, { type = "BLIP", handle = blip })
+    end
+end
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if GetCurrentResourceName() ~= resourceName then return end
+    for i=1, #Config.CreatedEntries do
+        if Config.CreatedEntries[i].type == "BLIP" then
+            RemoveBlip(Config.CreatedEntries[i].handle)
+        elseif Config.CreatedEntries[i].type == "PROMPT" then
+            Citizen.InvokeNative(0x00EDE88D4D13CF59, Config.CreatedEntries[i].handle)
         end
     end
 end)

@@ -20,14 +20,20 @@ local Translations = {
 	  name_outfits = 'name',
   },
   blip = {
-      shop = 'A clothing store',
+      shop = 'Clothing Store',
 	  cloakroom = 'Wardrobe',
   },
+  prompts = {
+      zoom_in = 'Zoom In',
+	  zoom_out = 'Zoom Out',
+	  camera_ud = 'Camera Up/Down',
+	  turn_lr = 'Turn Left/Right',
+  },
   title = {
-	shoptext = 'Press ~INPUT_JUMP~ to open a clothing store',
+	--shoptext = 'Press ~INPUT_JUMP~ to open a clothing store',
 	cloakroomtext = 'Press ~INPUT_JUMP~ to open the changing rooms',
-	clothes = 'Clothes',--Костюмы
-	choose = 'choose your clothes',--выберите свою одежду.
+	clothes = 'Clothes',
+	choose = 'choose your clothes',
 	options = 'options',
 	wear = 'Wear Outfit',
 	wear_desc = 'dress up',

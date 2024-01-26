@@ -23,8 +23,14 @@ local Translations = {
       shop = 'Магазин одежды',
 	  cloakroom = 'Гардероб',
   },
+  prompts = {
+      zoom_in = 'Приблизить',
+	  zoom_out = 'Отдалить',
+	  camera_ud = 'Камера Вверх/Вниз',
+	  turn_lr = 'Повернуть Влево/Вправо',
+  },
   title = {
-	shoptext = 'Нажмите ~INPUT_JUMP~ , чтобы открыть магазин одежды.',
+	--shoptext = 'Нажмите ~INPUT_JUMP~ , чтобы открыть магазин одежды.',
 	cloakroomtext = 'Нажмите ~INPUT_JUMP~ , чтобы открыть гардероб.',
 	clothes = 'Одежда',--Костюмы
 	choose = 'выберите свою одежду',--выберите свою одежду.
