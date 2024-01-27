@@ -12,6 +12,12 @@ for k, v in ipairs(neededResources) do
 end
 
 detectNeededResources()
+
+RegisterNetEvent('rsg-clothes:server:resetplayerbucket', function()
+    local src = source
+    SetPlayerRoutingBucket(src, 0)
+end)
+
 RegisterServerEvent('rsg-clothes:Save')
 AddEventHandler('rsg-clothes:Save', function(Clothes, Name, price)
     local src = source

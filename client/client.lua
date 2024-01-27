@@ -397,6 +397,7 @@ function TeleportAndFade(coords4, resetCoords)
         CurentCoords = {}
         TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_IO" }, false)
         inClothingStore = false
+        TriggerServerEvent('rsg-clothes:server:resetplayerbucket')
     end
 end
 
@@ -688,6 +689,7 @@ AddEventHandler('onResourceStop', function(resourceName)
             RemoveBlip(Config.CreatedEntries[i].handle)
         elseif Config.CreatedEntries[i].type == "PROMPT" then
             Citizen.InvokeNative(0x00EDE88D4D13CF59, Config.CreatedEntries[i].handle)
+            PromptsEnabled = false
         end
     end
 end)
