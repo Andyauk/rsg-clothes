@@ -6,7 +6,13 @@ local Outfits_tab = {}
 local CurrentPrice = 0
 local CurentCoords = {}
 local playerHeading = nil
+local inClothingStore = false
 local RoomPrompts = GetRandomIntInRange(0, 0xffffff)
+
+-- export for clothing active
+exports('IsCothingActive', function()
+    return inClothingStore
+end)
 
  --set clothing door state
 Citizen.CreateThread(function()
@@ -384,11 +390,13 @@ function TeleportAndFade(coords4, resetCoords)
     Wait(1000)
     Citizen.InvokeNative(0x203BEFFDBE12E96A, PlayerPedId(), coords4)
     SetEntityCoordsNoOffset(PlayerPedId(), coords4, true, true, true)
+    inClothingStore = true
     Wait(1500)
     DoScreenFadeIn(1800)
     if resetCoords then
         CurentCoords = {}
         TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_IO" }, false)
+        inClothingStore = false
     end
 end
 
