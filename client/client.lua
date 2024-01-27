@@ -207,17 +207,17 @@ function ClothingLight()
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading + 2)
-            end            
+            end
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
-            end            
+            end
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_DOWN']) then
                 if c_zoom + 0.25 < 2.5 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
-            end            
+            end
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_UP']) then
                 if c_zoom - 0.25 < 2.5 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
@@ -229,7 +229,7 @@ function ClothingLight()
                     c_offset = c_offset + 0.5 / 7
                     camera(c_zoom, c_offset)
                 end
-            end            
+            end
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['S']) then
                 if c_offset - 0.5 / 7 < 1.2 and c_offset - 0.5 / 7 > -1.0 then
                     c_offset = c_offset - 0.5 / 7
@@ -242,7 +242,7 @@ function ClothingLight()
     Citizen.CreateThread(function()
         while ClothingCamera do
             Wait(0)
-            
+
             DisableAllControlActions(0)
             DisableAllControlActions(1)
             DisableAllControlActions(2)
