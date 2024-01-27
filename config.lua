@@ -45,6 +45,7 @@ Config.Zones1 = {
         fittingcoords = vector4(2555.500, -1161.000, 53.730, 310.371),
         quitcoords = vector4(2553.285, -1161.101, 53.684, 96.703),
         promtcoords = vector3(2554.9929, -1168.596, 53.68354),
+        epromtcoords = vector3(2553.7929, -1161.27, 53.683544),
         showblip = true
     },
     {
@@ -53,6 +54,7 @@ Config.Zones1 = {
         fittingcoords = vector4(-767.951, -1294.627, 43.835, 250.153),
         quitcoords = vector4(-766.549, -1293.269, 43.836, 348.399),
         promtcoords = vector3(-762.0018, -1291.981, 43.853542),
+        epromtcoords = vector3(-766.5512, -1293.67, 43.835578),
         showblip = true
     },
     {
@@ -69,6 +71,7 @@ Config.Zones1 = {
         fittingcoords = vector4(-3688.229, -2624.204, -10.218, 359.769),
         quitcoords = vector4(-3687.822, -2630.876, -13.395, 73.005),
         promtcoords = vector3(-3687.79, -2630.85, -13.39526),
+        epromtcoords = vector3(-3687.168, -2622.447, -10.19031),
         showblip = true
     },
     {

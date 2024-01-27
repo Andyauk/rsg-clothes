@@ -602,7 +602,7 @@ GetClosestConsumer = function()
     playerCoords = GetEntityCoords(PlayerPedId())
 
     for _,data in pairs(Config.Zones1) do
-        if #(playerCoords - data.promtcoords) < 1.0 then
+        if (data.promtcoords and #(playerCoords - data.promtcoords) < 1.0) or (data.epromtcoords and #(playerCoords - data.epromtcoords) < 1.0) then
             CurentCoords = data
             return true
         end
