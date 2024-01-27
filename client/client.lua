@@ -6,6 +6,7 @@ local Outfits_tab = {}
 local CurrentPrice = 0
 local CurentCoords = {}
 local playerHeading = nil
+local RoomPrompts = GetRandomIntInRange(0, 0xffffff)
 
  --set clothing door state
 Citizen.CreateThread(function()
@@ -169,10 +170,6 @@ function MenuUpdateClothes(data, menu)
             end
             if CurrentPrice ~= CalculatePrice() then
                 CurrentPrice = CalculatePrice()
-                local str = Citizen.InvokeNative(0xFA925AC00EB830B9, 10, "LITERAL_STRING",
-                    tostring(CurrentPrice .. "$"), Citizen.ResultAsLong())
-                Citizen.InvokeNative(0xFA233F8FE190514C, str)
-                Citizen.InvokeNative(0xE9990552DEC71600)
             end
             Change(data.current.value, data.current.category, data.current.change_type)
         end
@@ -200,53 +197,70 @@ function ClothingLight()
     Citizen.CreateThread(function()
         while ClothingCamera do
             Wait(0)
+
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['D']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading + 2)
-            end
+            end            
             if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['A']) then
                 local heading = GetEntityHeading(PlayerPedId())
                 SetEntityHeading(PlayerPedId(), heading - 2)
-            end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLDOWN']) then
+            end            
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_DOWN']) then
                 if c_zoom + 0.25 < 2.5 and c_zoom + 0.25 > 0.7 then
                     c_zoom = c_zoom + 0.25
                     camera(c_zoom, c_offset)
                 end
-            end
-            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['MWSCROLLUP']) then
+            end            
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['INPUT_CURSOR_SCROLL_UP']) then
                 if c_zoom - 0.25 < 2.5 and c_zoom - 0.25 > 0.7 then
                     c_zoom = c_zoom - 0.25
                     camera(c_zoom, c_offset)
                 end
             end
-            if IsDisabledControlPressed(0, 0x53296B75) then
-                local cursor_y = -0.5 + GetDisabledControlNormal(0, `INPUT_CURSOR_Y`)
-                if c_offset - cursor_y / 7 < 1.2 and c_offset - cursor_y / 7 > -1.0 then
-                    c_offset = c_offset - cursor_y / 7
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['W']) then
+                if c_offset + 0.5 / 7 < 1.2 and c_offset + 0.5 / 7 > -1.0 then
+                    c_offset = c_offset + 0.5 / 7
+                    camera(c_zoom, c_offset)
+                end
+            end            
+            if IsDisabledControlPressed(0, RSGCore.Shared.Keybinds['S']) then
+                if c_offset - 0.5 / 7 < 1.2 and c_offset - 0.5 / 7 > -1.0 then
+                    c_offset = c_offset - 0.5 / 7
                     camera(c_zoom, c_offset)
                 end
             end
+
         end
     end)
     Citizen.CreateThread(function()
         while ClothingCamera do
             Wait(0)
+            
             DisableAllControlActions(0)
             DisableAllControlActions(1)
             DisableAllControlActions(2)
 
-            Citizen.InvokeNative(0x351220255D64C155, 0, 0x8BDE7443, true)
             Citizen.InvokeNative(0x351220255D64C155, 0, 0x62800C92, true)
-            Citizen.InvokeNative(0x351220255D64C155, 0, 0x53296B75, true)
-            Citizen.InvokeNative(0x351220255D64C155, 1, 0x8BDE7443, true)
             Citizen.InvokeNative(0x351220255D64C155, 1, 0x62800C92, true)
-            Citizen.InvokeNative(0x351220255D64C155, 1, 0x53296B75, true)
-            Citizen.InvokeNative(0x351220255D64C155, 2, 0x8BDE7443, true)
             Citizen.InvokeNative(0x351220255D64C155, 2, 0x62800C92, true)
-            Citizen.InvokeNative(0x351220255D64C155, 2, 0x53296B75, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x8BDE7443, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x8FD015D8, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x8FD015D8, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x8FD015D8, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0xD27782E3, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0xD27782E3, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0xD27782E3, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0x7065027D, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0x7065027D, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0x7065027D, true)
+            Citizen.InvokeNative(0x351220255D64C155, 0, 0xB4E465B4, true)
+            Citizen.InvokeNative(0x351220255D64C155, 1, 0xB4E465B4, true)
+            Citizen.InvokeNative(0x351220255D64C155, 2, 0xB4E465B4, true)
 
-            TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_OUT", "ZOOM_IN" }, true)
+            TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_IO" }, true)
 
         end
     end)
@@ -374,7 +388,7 @@ function TeleportAndFade(coords4, resetCoords)
     DoScreenFadeIn(1800)
     if resetCoords then
         CurentCoords = {}
-        TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_OUT", "ZOOM_IN" }, false)
+        TogglePrompts({ "TURN_LR", "CAM_UD", "ZOOM_IO" }, false)
     end
 end
 
@@ -548,7 +562,7 @@ AddEventHandler('rsg-clothes:StartOutfits', function()
     TriggerEvent('rsg-horses:client:FleeHorse')
     Wait(0)
     TeleportAndFade(CurentCoords.fittingcoords, false)
-    TriggerServerEvent("rsg-clothes:LoadClothes", 2)
+    TriggerServerEvent('rsg-clothes:LoadClothes', 2)
 end)
 
 Citizen.CreateThread(function()
@@ -595,11 +609,21 @@ RegisterPrompts = function()
         local prompt = Citizen.InvokeNative(0x04F97DE45A519419, Citizen.ResultAsInteger())
         Citizen.InvokeNative(0x5DD02A8318420DD7, prompt, CreateVarString(10, "LITERAL_STRING", Config.Prompts[i].label))
         Citizen.InvokeNative(0xB5352B7494A08258, prompt, Config.Prompts[i].control or RSGCore.Shared.Keybinds[Config.Keybind])
+        
+        if Config.Prompts[i].control2  then
+            Citizen.InvokeNative(0xB5352B7494A08258, prompt, Config.Prompts[i].control2)
+        end
+
         Citizen.InvokeNative(0x94073D5CA3F16B7B, prompt, Config.Prompts[i].time or 1000)
+
+        if Config.Prompts[i].control  then
+            Citizen.InvokeNative(0x2F11D3A254169EA4, prompt, RoomPrompts)
+        end
+
         Citizen.InvokeNative(0xF7AA2696A22AD8B9, prompt)
         Citizen.InvokeNative(0x8A0FB4D03A630D21, prompt, false)
         Citizen.InvokeNative(0x71215ACCFDE075EE, prompt, false)
-		
+
         table.insert(Config.CreatedEntries, { type = "PROMPT", handle = prompt })
         newTable[Config.Prompts[i].id] = prompt
     end
@@ -615,6 +639,8 @@ TogglePrompts = function(data, state)
             Citizen.InvokeNative(0x71215ACCFDE075EE, (data ~= "ALL" and Config.Prompts[prompt]) or prompt, state)
         end
     end
+    local label  = CreateVarString(10, 'LITERAL_STRING', Lang:t('blip.shop').. ' - ~t6~'..CurrentPrice..'$')
+    PromptSetActiveGroupThisFrame(RoomPrompts, label)
     PromptsEnabled = state
 end
 

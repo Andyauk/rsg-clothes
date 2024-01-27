@@ -7,7 +7,8 @@ Config.BlipSprite = 1195729388	 -- Clothing shop sprite
 Config.BlipSpriteCloakRoom = 1496995379	 -- Clothing shop sprite
 Config.BlipScale = 0.2 -- Blip scale
 Config.OpenKey = 0xD9D0E1C0 -- Opening key hash
-Config.Keybind = 'ENTER'
+Config.Keybind = 'ENTER' -- keybind
+Config.ShowPlayerBucket = true -- prints to server the player routing bucket
 
 Config.SetDoorState = {
     -- open = 0 / locked = 1
@@ -21,23 +22,72 @@ Config.SetDoorState = {
 }
 
 Config.Zones1 = {
-	
-	{location = 'valentine',    blipcoords = vector3(-327.07, 807.77, 117.89),        	fittingcoords = vector4(-327.765, 807.769, 117.894, 254.593),		quitcoords = vector4(-326.033, 805.976, 117.882, 241.450),   promtcoords = vector3(-325.9504, 806.58251, 117.8897), 	showblip = true}, -- Valentine
-    {location = 'rhodes',    	blipcoords = vector3(1323.64, -1289.04, 77.02),         fittingcoords = vector4(1324.265, -1287.926, 77.018, 150.606),		quitcoords = vector4(1322.828, -1291.433, 77.028, 167.880),  promtcoords = vector3(1322.9941, -1291.02, 77.031051),		showblip = true}, -- Rhodes
-    {location = 'saintdenis',   blipcoords = vector3(2554.90, -1166.89, 53.68),        	fittingcoords = vector4(2555.500, -1161.000, 53.730, 310.371),		quitcoords = vector4(2553.285, -1161.101, 53.684, 96.703), 	 promtcoords = vector3(2554.9929, -1168.596, 53.68354),		showblip = true}, -- Saint Denis
-    {location = 'blackwater',   blipcoords = vector3(-761.99, -1293.55, 43.84),         fittingcoords = vector4(-767.951, -1294.627, 43.835, 250.153),		quitcoords = vector4(-766.549, -1293.269, 43.836, 348.399),  promtcoords = vector3(-762.0018, -1291.981, 43.853542),	showblip = true}, -- BlackWater
-    {location = 'strawberry',   blipcoords = vector3(-1793.4, -394.13, 160.34),       	fittingcoords = vector4(-1794.604, -395.540, 160.336, 317.471),		quitcoords = vector4(-1791.907, -391.948, 160.266, 160.266), promtcoords = vector3(-1792.499, -392.3773, 160.35339),	showblip = true}, -- Strawberry
-    {location = 'аrmadillo',   	blipcoords = vector3(-3687.866, -2630.905, -13.40),  	fittingcoords = vector4(-3688.229, -2624.204, -10.218, 359.769),	quitcoords = vector4(-3687.822, -2630.876, -13.395, 73.005), promtcoords = vector3(-3687.79, -2630.85, -13.39526),		showblip = true}, -- Armadillo
-    {location = 'tumbleweed',   blipcoords = vector3(-5480.13, -2933.97, -0.365),      	fittingcoords = vector4(-5479.786, -2932.66, -0.283, 166.096),		quitcoords = vector4(-5481.510, -2935.005, -0.396, 85.180),  promtcoords = vector3(-5480.852, -2934.573, -0.384145),	showblip = true}, -- Tubleweed
+
+    {
+        location = 'valentine',
+        blipcoords = vector3(-327.07, 807.77, 117.89),
+        fittingcoords = vector4(-327.765, 807.769, 117.894, 254.593),
+        quitcoords = vector4(-326.033, 805.976, 117.882, 241.450),
+        promtcoords = vector3(-325.9504, 806.58251, 117.8897),
+        showblip = true
+    },
+    {
+        location = 'rhodes',
+        blipcoords = vector3(1323.64, -1289.04, 77.02),
+        fittingcoords = vector4(1324.265, -1287.926, 77.018, 150.606),
+        quitcoords = vector4(1322.828, -1291.433, 77.028, 167.880),
+        promtcoords = vector3(1322.9941, -1291.02, 77.031051),
+        showblip = true
+    },
+    {
+        location = 'saintdenis',
+        blipcoords = vector3(2554.90, -1166.89, 53.68),
+        fittingcoords = vector4(2555.500, -1161.000, 53.730, 310.371),
+        quitcoords = vector4(2553.285, -1161.101, 53.684, 96.703),
+        promtcoords = vector3(2554.9929, -1168.596, 53.68354),
+        showblip = true
+    },
+    {
+        location = 'blackwater',
+        blipcoords = vector3(-761.99, -1293.55, 43.84),
+        fittingcoords = vector4(-767.951, -1294.627, 43.835, 250.153),
+        quitcoords = vector4(-766.549, -1293.269, 43.836, 348.399),
+        promtcoords = vector3(-762.0018, -1291.981, 43.853542),
+        showblip = true
+    },
+    {
+        location = 'strawberry',
+        blipcoords = vector3(-1793.4, -394.13, 160.34),
+        fittingcoords = vector4(-1794.604, -395.540, 160.336, 317.471),
+        quitcoords = vector4(-1791.907, -391.948, 160.266, 160.266),
+        promtcoords = vector3(-1792.499, -392.3773, 160.35339),
+        showblip = true
+    },
+    {
+        location = 'аrmadillo',
+        blipcoords = vector3(-3687.866, -2630.905, -13.40),
+        fittingcoords = vector4(-3688.229, -2624.204, -10.218, 359.769),
+        quitcoords = vector4(-3687.822, -2630.876, -13.395, 73.005),
+        promtcoords = vector3(-3687.79, -2630.85, -13.39526),
+        showblip = true
+    },
+    {
+        location = 'tumbleweed',
+        blipcoords = vector3(-5480.13, -2933.97, -0.365),
+        fittingcoords = vector4(-5479.786, -2932.66, -0.283, 166.096),
+        quitcoords = vector4(-5481.510, -2935.005, -0.396, 85.180),
+        promtcoords = vector3(-5480.852, -2934.573, -0.384145),
+        showblip = true
+    },
 
 }
 
 Config.Cloakroom = {
-    vector3(-325.29, 766.24, 117.48), -- VALENTINE
-    vector3(-1817.11, -368.77, 166.54), -- Strawberry
-    vector3(-825.40, -1323.76, 47.91), -- BlackWater
-    vector3(1331.86, -1377.35, 80.55), -- Rhodes
-    vector3(2550.67, -1159.46, 53.73) -- SAINT DENIS
+    vector3(-325.29, 766.24, 117.48),   -- valentine
+    vector3(-1817.11, -368.77, 166.54), -- strawberry
+    vector3(-825.40, -1323.76, 47.91),  -- blackwater
+    vector3(1331.86, -1377.35, 80.55),  -- rhodes
+    vector3(2550.67, -1159.46, 53.73)   -- saint denis
 }
 
 Config.Label = {
@@ -207,11 +257,31 @@ Config.MenuElements = {
 }
 
 Config.Prompts = {
-    { label = Lang:t('blip.shop'), id = "OPEN_CLOTHING_MENU" },
-	{ label = Lang:t('prompts.zoom_in'), id = "ZOOM_IN", control = `INPUT_CURSOR_SCROLL_UP`, time = 0 }, --0x62800C92	
-	{ label = Lang:t('prompts.zoom_out'), id = "ZOOM_OUT", control = `INPUT_CURSOR_SCROLL_DOWN`, time = 0 }, --0x8BDE7443    
-	{ label = Lang:t('prompts.camera_ud'), id = "CAM_UD", control = `INPUT_INSPECT_ZOOM`, time = 0 }, --0x53296B75
-	{ label = Lang:t('prompts.turn_lr'), id = "TURN_LR", control = `INPUT_MOVE_LR`, time = 0 },
+    {
+        label = Lang:t('blip.shop'),
+        id = "OPEN_CLOTHING_MENU" 
+    },
+    {
+        label = Lang:t('prompts.zoom_io'),
+        id = "ZOOM_IO",
+        control = `INPUT_CURSOR_SCROLL_UP`,
+        control2 = `INPUT_CURSOR_SCROLL_DOWN`,
+        time = 0
+    },
+    {
+        label = Lang:t('prompts.camera_ud'),
+        id = "CAM_UD",
+        control = `INPUT_MOVE_UP_ONLY`,
+        control2 = `INPUT_MOVE_DOWN_ONLY`,
+        time = 0
+    },
+    {
+        label = Lang:t('prompts.turn_lr'),
+        id = "TURN_LR",
+        control = `INPUT_MOVE_LEFT_ONLY`,
+        control2 = `INPUT_MOVE_RIGHT_ONLY`,
+        time = 0
+    },
 }
 
 --INPUT_RADIAL_MENU_NAV_UD
